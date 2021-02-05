@@ -1,0 +1,44 @@
+#!/usr/bin/env node
+const app = require('../app');
+const http = require('http');
+const logger =  require('../libs/log4j')('app');
+const initPermission = require('../middleware/initPermission');
+const initRole = require('../middleware/initRole');
+const initUser = require('../middleware/initUser');
+(async function (global) {
+  try {
+    // 初始化权限
+    await initPermission();
+    await initRole();
+    await initUser();
+
+    // 端口号
+    const port = normalizePort(process.env.PORT || '3000');
+    app.set('port', port);
+    // 创建服务器
+    const server = http.createServer(app);
+    // 监听端口
+    server.listen(port, () => {
+      logger.info("server start at http://localhost:" + port);
+    });
+  } catch (e) {
+    logger.error('server start error: ' + e);
+  }
+})(global);
+
+// util
+function normalizePort(val) {
+  const port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
