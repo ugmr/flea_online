@@ -23,7 +23,6 @@
     * */
 const mpattern = /^1(3[0-9]|4[5,7]|5[0,1,2,3,5,6,7,8,9]|6[2,5,6,7]|7[0,1,7,8]|8[0-9]|9[1,8,9])\d{8}$/;
 const ppattern = /(?=.*([a-zA-Z].*))(?=.*[0-9].*)[a-zA-Z0-9-*/+.~!@#$%^&*()]{6,20}$/;
-const upattern = /^[a-zA-Z][a-zA-Z0-9_-]{5,15}$/;
 // 手机号验证
 exports.checkMobile = function (mobile) {
   return mpattern.test(mobile);
@@ -32,9 +31,10 @@ exports.checkMobile = function (mobile) {
 exports.checkPassword = function (password) {
   return ppattern.test(password);
 }
-//
+// 用户名验证
 exports.checkUserName = function (userName) {
-  return upattern.test(userName);
+  console.log(userName.length);
+  return userName.length > 0 && userName.length <= 20;
 }
 //
 exports.checkClientId = function (clientId) {

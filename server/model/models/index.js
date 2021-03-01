@@ -29,6 +29,9 @@ const oldModels = {
 
 const getModel = function (oldModel) {
   const model = {}
+
+  model.modelName = oldModel.collection.collectionName;
+
   // 新建 ？ 格式错误时
   model.create = function (info) {
     return new Promise(((resolve, reject) => {
@@ -43,7 +46,7 @@ const getModel = function (oldModel) {
   // 删除
   model.remove = function (conditions) {
     return new Promise(((resolve, reject) => {
-      oldModel.remove(conditions).then(r => {
+      oldModel.deleteOne(conditions).then(r => {
         if(!r) reject(new CError(ERROR.DATA_NOT_FOUND, 'Not found, delete failed'));
         resolve(r);
       }).catch(e => {

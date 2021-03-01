@@ -1,15 +1,28 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import mutations from './mutations';
-import actions from './actions';
+import createPersistedState from "vuex-persistedstate";
+
+import overlay from "./modules/overlay";
+import log from "./modules/log";
+import theme from "./modules/theme";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    isLogin: false,  // 用户是否登陆
-    userInfo: {}     // 登陆用户信息
+    title: "",
   },
-  mutations,
-  actions,
+  mutations: {
+    ["CHANGE_TITLE"](state, title) {
+      state.title = title;
+    }
+  },
+  modules: {
+    overlay,
+    log,
+    theme
+  },
+  plugins: [
+    createPersistedState()
+  ]
 });

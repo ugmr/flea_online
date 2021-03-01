@@ -14,10 +14,9 @@ const config = new qiniu.conf.Config();
 config.zone = qiniu.zone.Zone_z2;
 
 // 图片上传
-const upload = (req, res) => {
+const upload = async (req, res, next) => {
   // 图片数据流
   const imgData = req.files.imgData;
-  logger.info(imgData)
 
   const fileName = imgData.path.split('/').slice(-1)[0];
 
@@ -29,20 +28,21 @@ const upload = (req, res) => {
   formUploader.putFile(uploadToken, key, localFile, putExtra, function (respErr, respBody, respInfo) {
     fs.unlinkSync(imgData.path);
     if (respErr) {
-      throw new CError(ERROR.SERVER_ERROR, '上传失败');
+      console.log(respErr);
+      next(new CError(ERROR.SERVER_ERROR, '上传失败'))
     }
     if (respInfo.statusCode == 200) {
-      const imageSrc = imageUrl + '/' + respBody.key;
+      const imageSrc = 'http://' + imageUrl + '/' + respBody.key;
       res.status(200).json({
         status: 'success',
         message: '上传成功',
         data: {
-          imageUrl: imageSrc
+          url: imageSrc
         }
       });
     } else {
       console.log(respBody)
-      throw new CError(ERROR.SERVER_ERROR, '上传失败');
+      next(new CError(ERROR.SERVER_ERROR, '上传失败'))
     }
   });
 }

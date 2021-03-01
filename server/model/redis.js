@@ -71,7 +71,8 @@ const del = function (dbNum, key) {
 // redis库
 const types = {
   CAPTCHA: 0,
-  TOKEN: 1
+  TOKEN: 1,
+  POST: 2,
 }
 
 module.exports = {

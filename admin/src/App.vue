@@ -1,15 +1,28 @@
 <template>
-  <v-app id="app">
+  <div id="app">
     <router-view></router-view>
-  </v-app>
+    <v-overlay :value="overlay">
+      <v-progress-circular
+          indeterminate
+          size="64"
+      ></v-progress-circular>
+    </v-overlay>
+  </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "App",
   data: () => ({
     //
   }),
+  methods: {
+  },
+  computed: {
+    ...mapState("overlay", ["overlay"])
+  }
 };
 </script>
 

@@ -16,6 +16,7 @@ export default class Net {
     this.cvs = options.canvas;
     this.ctx = this.cvs.getContext("2d");
     this.dotNum = options.dotNum || 150;
+    this.dotSize = options.dotSize || 1;
     this.dots = [];
     this.pointer = { x: null, y: null };
     this.lineDis = options.lineDis || 20000;
@@ -74,8 +75,10 @@ export default class Net {
           : 1;
 
       // 绘制粒子
+      that.ctx.beginPath();
+      that.ctx.arc(dot.x, dot.y, this.dotSize, 0, 2 * Math.PI, false);
       that.ctx.fillStyle = that.dotColor;
-      that.ctx.fillRect(dot.x - 0.5, dot.y - 0.5, 1, 1);
+      that.ctx.fill();
       //绘制连线
       odots.forEach((odot) => {
         if (!odot.x || !dot.y || odot == dot) return;
@@ -119,17 +122,17 @@ export default class Net {
       this.animate();
     }, 100);
   }
-  changeTheme(newTheme = {}) {
-    this.theme = newTheme;
-    this.lineColor = this.theme.lineColor || "#000";
-    this.backgroundColor = this.theme.backgroundColor || "#fff";
-    this.dotColor = this.theme.dotColor || "#000";
-  }
-
   // 取消事件绑定
   destroy() {
     window.cancelAnimationFrame(RAF);
     window.onmousemove = null;
     window.onmouseout = null;
+  }
+  // 更换主题
+  changeTheme(newTheme = {}) {
+    this.theme = newTheme;
+    this.lineColor = this.theme.lineColor || "#000";
+    this.backgroundColor = this.theme.backgroundColor || "#fff";
+    this.dotColor = this.theme.dotColor || "#000";
   }
 }

@@ -11,8 +11,8 @@ const noticeSchema = new Schema({
   userId: {type: Schema.Types.ObjectId, required: true, validate: userIdValidator},
   // 标题
   title: { type: String, required: true},
-  // 封面图
-  cover: {type: String, required: true},
+  // 图片
+  photos: Array,
   // 内容
   content: {type: String},
   // 状态（是否被查看）

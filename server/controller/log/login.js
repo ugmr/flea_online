@@ -21,23 +21,25 @@ const login = function (admin) {
     // 管理员登陆
     const r = await role.findOne({name: result.role}) || await role.findOne({default: true});
     if(admin && (!r || !r.isAdmin)) throw new CError(ERROR.LOGIN_REQUIRED, '不是管理员账户');
-    logger.info(result, r);
-    // 生成token
-    const token = await jwt.sign({
+    const userInfo = {
       id: result._id,
       mobile: result.mobile,
       userName: result.userName,
       role: r._id,
       isAdmin: r.isAdmin
-    });
+    }
+    // 生成token
+    const token = await jwt.sign(userInfo);
     // 写入redis
     await redisDb.set(redisDb.types.TOKEN, result.mobile, token, 24 * 60 * 60 * 60);
+    userInfo.profilePhoto = result.profilePhoto;
     // 返回
     res.status(200).json({
       status: 'success',
       message: '登陆成功',
       data: {
-        token: token
+        token: token,
+        userInfo: userInfo
       }
     });
   };

@@ -1,0 +1,56 @@
+[
+  {
+    "name": "推广",
+    "description": "推广管理",
+    "path": "/advert",
+    "children": [
+      {
+        "name": "添加推广",
+        "method": "add",
+        "description": "添加推广"
+      },
+      {
+        "name": "删除推广",
+        "method": "delete",
+        "description": "删除推广"
+      },
+      {
+        "name": "查询推广",
+        "method": "get",
+        "description": "查询推广"
+      },
+      {
+        "name": "修改推广",
+        "method": "put",
+        "description": "修改推广"
+      }
+    ]
+  },
+  {
+    "name": "通知",
+    "description": "通知管理",
+    "path": "/notice",
+    "children": [
+      {
+        "name": "添加通知",
+        "method": "add",
+        "description": "添加通知"
+      },
+      {
+        "name": "删除通知",
+        "method": "delete",
+        "description": "删除通知"
+      },
+      {
+        "name": "查询通知",
+        "method": "get",
+        "description": "查询通知"
+      },
+      {
+        "name": "修改通知",
+        "method": "put",
+        "description": "修改通知"
+      }
+    ]
+  }
+]

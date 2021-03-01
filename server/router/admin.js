@@ -5,16 +5,19 @@ const actions = require('../controller/actions');
 const relation = require('../controller/relation');
 const comment = require('../controller/comment');
 const focus = require('../controller/focus');
+const setting = require('../controller/setting');
+const permission = require('../controller/permission');
 const evaluation = require('../controller/evaluation');
+const role = require('../controller/role.js');
 // 身份验证中间件
 const auth = require('../middleware/auth');
 
 // 登陆登出
 router.post('/login', require('../controller/log/login')(true));
-router.post('/logout', auth(true),require('../controller/log/logout')(true))
+router.post('/logout', auth(true),require('../controller/log/logout')(true));
 
 Object.keys(models).forEach(modelName => {
-  if(['blacklist', 'relation', 'collect', 'userTopic', 'postComment', 'goodsComment', 'evaluation'].includes(modelName)) return;
+  if(['post', 'role', 'permission','blacklist', 'relation', 'collect', 'userTopic', 'postComment', 'goodsComment', 'evaluation', 'setting'].includes(modelName)) return;
   const model = models[modelName];
 
   const modelUrl = `/${modelName}`;
@@ -64,6 +67,13 @@ router.delete('/goods/:id/comment/:cid', auth(true), comment.remove(models.goods
 router.get('/order/:id/evaluation', auth(true), evaluation.get);
 router.post('/order/:id/evaluation', auth(true), evaluation.add);
 router.delete('/order/:id/evaluation', auth(true), evaluation.remove);
-
-
+// 设置
+router.get("/setting", auth(true), setting.get);
+router.put("/setting", auth(true), setting.edit);
+// 权限
+router.get("/permission", auth(true), permission.getList);
+// 角色
+router.get("/role", auth(true), role.getList);
+// 话题
+// router.get("/topic", auth(true), topic.getTopicList);
 module.exports = router;

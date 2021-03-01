@@ -1,4 +1,5 @@
 const { CError, ERROR } = require('../libs/error');
+const redis = require("../model/redis");
 
 const add = (model, my) => {
   return async (req, res) => {
@@ -60,13 +61,14 @@ const replace = (model) => {
     });
   }
 }
+// 获取信息
 const get = (model, my) => {
   return async (req, res) => {
     let userId;
     if(my) userId = req.token.id;
     else userId= req.params.id;
     const result = await model.findOne({_id: userId});
-    console.log(result)
+
     res.status(200).json({
       status: 'success',
       message: '获取成功',
@@ -76,19 +78,44 @@ const get = (model, my) => {
     });
   };
 }
+// 获取列表
 const getList = (model, my) => {
   return async (req, res) => {
+
+    // 获取参数
     let { conditions, fields, options } = req.query;
     conditions = JSON.parse(conditions || '{}');
     fields = JSON.parse(fields || '{}');
     options = JSON.parse(options || '{}');
+
+    Object.keys(conditions).forEach(key => {
+      const value = conditions[key];
+      conditions[key] = key === "parentId"
+          ? value
+          : {$regex: value, $options: "$i"};
+    });
+
     if(req.params.id) {
       conditions.userId = req.params.id;
     }
     if(my) {
       conditions.userId = req.token.id;
     }
+
     const result = await model.findMany(conditions, fields, options);
+
+    const modelName = model.modelName;
+    if(modelName.toUpperCase() == "POST") {
+      for (const item of result) {
+        const data = await redis.get(redis.types[model.modelName], item._id);
+        if (data) {
+          item.view = data.view;
+          item.like = data.like;
+        }
+      }
+    }
+
+    // 返回数据
     res.status(200).json({
       status: 'success',
       message: '获取列表成功',
@@ -108,3 +135,9 @@ module.exports = {
   replace,
   remove
 }
+
+// 浏览量
+// 点赞数
+// 收藏数
+
+// 帖子 回复数

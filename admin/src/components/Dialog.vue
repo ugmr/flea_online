@@ -1,10 +1,13 @@
 <template>
-  <div></div>
+  <div class="Dialog">
+
+  </div>
 </template>
 
 <script>
 export default {
-name: "Dashboard"
+  name: "Dialog",
+
 }
 </script>
 

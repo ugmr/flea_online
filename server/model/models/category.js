@@ -8,6 +8,8 @@ const categorySchema = new Schema({
   name: {type: String, required: true},
   // 分类封面图
   cover: {type: String, required: true},
+  // 分类简介
+  description: {type: String, required: true},
   // 分类创建时间
   createdAt: {type: Schema.Types.Date, default: new Date()}
 });

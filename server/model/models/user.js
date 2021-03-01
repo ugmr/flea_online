@@ -6,8 +6,9 @@ const Schema = mongoose.Schema;
 const mobileValidator = checkMobile;
 const passwordValidator = checkPassword;
 const usernameValidator = checkUserName;
+
 const roleValidator = async (val) => {
-  return !!await role.findOne({name: val});
+  return !!await role.findOne({_id: val});
 }
 
 const userSchema = new Schema({
@@ -30,7 +31,7 @@ const userSchema = new Schema({
   },
   profilePhoto: {  // 头像
     type: String,
-    default: ''
+    default: '',
   },
   gender: {        // 性别
     type: String,
@@ -61,8 +62,8 @@ const userSchema = new Schema({
       return v >= 0 && v <= 100;
     }
   },
-  role: {
-    type: String,
+  role: {          // 角色
+    type: Schema.Types.ObjectId,
     required: true,
     validate: roleValidator
   },

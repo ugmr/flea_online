@@ -1,17 +1,13 @@
 #!/usr/bin/env node
 const app = require('../app');
 const http = require('http');
+const init  = require("../middleware/init")
 const logger =  require('../libs/log4j')('app');
-const initPermission = require('../middleware/initPermission');
-const initRole = require('../middleware/initRole');
-const initUser = require('../middleware/initUser');
+
 (async function (global) {
   try {
-    // 初始化权限
-    await initPermission();
-    await initRole();
-    await initUser();
-
+    // 初始化数据
+    await init();
     // 端口号
     const port = normalizePort(process.env.PORT || '3000');
     app.set('port', port);

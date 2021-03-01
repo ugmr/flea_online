@@ -15,7 +15,9 @@ const postSchema = new Schema({
   // 链接商品
   goodsId: String,
   // 点赞数
-  like: {type: Number, default: 0}
+  like: {type: Number, default: 0},
+  // 浏览量
+  view: {type: Number, default: 0},
 });
 
 const post = mongoose.model('post', postSchema);

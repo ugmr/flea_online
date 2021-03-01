@@ -22,6 +22,8 @@ const roleSchema = new mongoose.Schema({
   permissions: {type: Array, required: true, validate: permissionsValidator},
   // 是否是管理员
   isAdmin: {type: Boolean, required: true},
+  // 描述
+  description: {type: String},
   // 默认角色
   default: {type: Boolean, required: true}
 });
