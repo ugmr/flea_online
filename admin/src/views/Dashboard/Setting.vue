@@ -81,7 +81,7 @@ export default {
     async getSetting () {
       try {
         const result = await api.getSetting();
-        this.setting = result.data.setting;
+        this.setting = result.data;
       } catch {
         this.$toast("获取设置信息失败");
       }

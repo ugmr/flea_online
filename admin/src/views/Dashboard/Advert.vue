@@ -2,8 +2,38 @@
   <div class="alert">
     <!-- 表格 -->
     <v-container>
-      <v-row>
-        <v-col cols="12">
+<!--      <v-row justify="center">-->
+<!--        <v-col cols="10">-->
+<!--          <v-carousel-->
+<!--              cycle-->
+<!--              height="400"-->
+<!--              hide-delimiter-background-->
+<!--              show-arrows-on-hover-->
+<!--          >-->
+<!--            <v-carousel-item-->
+<!--                v-for="(slide, i) in slides"-->
+<!--                :key="i"-->
+<!--            >-->
+<!--              <v-sheet-->
+<!--                  :color="colors[i]"-->
+<!--                  height="100%"-->
+<!--              >-->
+<!--                <v-row-->
+<!--                    class="fill-height"-->
+<!--                    align="center"-->
+<!--                    justify="center"-->
+<!--                >-->
+<!--                  <div class="display-3">-->
+<!--                    {{ slide }} Slide-->
+<!--                  </div>-->
+<!--                </v-row>-->
+<!--              </v-sheet>-->
+<!--            </v-carousel-item>-->
+<!--          </v-carousel>-->
+<!--        </v-col>-->
+<!--      </v-row>-->
+      <v-row justify="center">
+        <v-col cols="10">
           <!-- 卡片 -->
           <v-card class="card">
             <!-- 卡片头部 -->
@@ -48,12 +78,18 @@
                   {{ (pageCount - 1) * itemsPerPage + index + 1 }}
                 </template>
                 <template v-slot:item.operation="{ item }">
-                  <v-btn icon @click="showEditDialog(item)"><v-icon color="primary">mdi-square-edit-outline</v-icon></v-btn>
-                  <v-btn icon @click="showDeleteDialog(item._id)"><v-icon color="red">mdi-delete</v-icon></v-btn>
+                  <v-btn small color="primary" @click="showEditDialog(item)">
+                    <v-icon small class="mr-1">mdi-square-edit-outline</v-icon>
+                    编辑
+                  </v-btn>
+                  <v-btn small color="error" class="ml-1" @click="showDeleteDialog(item._id)">
+                    <v-icon small class="mr-1">mdi-delete</v-icon>
+                    删除
+                  </v-btn>
                 </template>
                 <template v-slot:item.isUsed="{ value }">
-                  <v-chip color="success" v-if="value">已应用</v-chip>
-                  <v-chip color="red" v-else>未应用</v-chip>
+                  <v-chip color="success" outlined v-if="value">已应用</v-chip>
+                  <v-chip color="red" outlined v-else>未应用</v-chip>
                 </template>
                 <template v-slot:item.type="{ value }">
                   {{ typeText(value) }}
@@ -244,6 +280,20 @@ import axios from "axios";
 export default {
   name: "Advert",
   data: () => ({
+    colors: [
+      'indigo',
+      'warning',
+      'pink darken-2',
+      'red lighten-1',
+      'deep-purple accent-4',
+    ],
+    slides: [
+      'First',
+      'Second',
+      'Third',
+      'Fourth',
+      'Fifth',
+    ],
     // 表格信息
     search: '',
     headers: [
@@ -251,7 +301,6 @@ export default {
       { text: '名称', value: 'title', sortable: false },
       { text: '类型', value: 'type'},
       { text: '链接', value: 'link', sortable: false },
-      { text: '封面', value: 'photo', sortable: false },
       { text: '是否应用', value: 'isUsed'},
       { text: '操作', value: 'operation', sortable: false },
     ],

@@ -6,10 +6,10 @@
   >
     <!-- 图像插槽 -->
     <template v-slot:img="props">
-      <v-img
-          :gradient="gradient"
-          v-bind="props"
-      />
+        <v-img
+            :gradient="gradient"
+            v-bind="props"
+        />
     </template>
 
     <v-list
@@ -101,20 +101,23 @@ export default {
             title: '通知管理',
             to: '/notice'
           }, {
-            title: '公告管理',
-            to: '/announcement'
-          }, {
-            title: '举报管理',
-            to: '/report'
-          }
+          title: '公告管理',
+          to: '/announcement'
+        }
+          // }, {
+          //   title: '举报管理',
+          //   to: '/report'
+          // }
         ]
       }, {
         title: '商城管理',
         icon: 'mdi-storefront-outline',
-        children: [{
-            title: '商品审核',
-            to: '/examine'
-          },{
+        children: [
+          // {
+          //   title: '商品审核',
+          //   to: '/examine'
+          // },
+          {
             title: '商品管理',
             to: '/goods'
           }, {
@@ -132,7 +135,8 @@ export default {
             title: "话题管理",
             to: "/topic"
           }, {
-            title: "帖子管理"
+            title: "帖子管理",
+            to: "/post"
           }
         ]
       }, {
@@ -159,14 +163,29 @@ export default {
         }]
       },
       {
+        title: "个人信息",
+        icon: "mdi-account",
+        children: [
+          {
+            title: "个人资料",
+            to: "/profile"
+          },
+          {
+            title: "修改密码",
+            to: "/password"
+          }
+        ]
+      },
+      {
         title: '数据报表',
         icon: 'mdi-finance',
         to: "/data"
-      },{
+      },
+      {
         title: '网站设置',
         icon: 'mdi-cog-outline',
         to: "/setting"
-      }
+      },
     ],
   }),
   computed: {

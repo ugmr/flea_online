@@ -1,6 +1,6 @@
 const {user} = require('../../model/models');
 const smsService = require('../../services/smsService');
-const {CError, ERROR} = require('../../libs/error');
+const { CError, ERROR } = require('../../libs/error');
 const { checkMobile, checkPassword, checkClientId, checkCode} = require('../../libs/check');
 
 // 忘记密码

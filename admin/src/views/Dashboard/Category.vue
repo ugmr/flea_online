@@ -80,7 +80,7 @@
     >
       <v-card>
         <v-card-title class="headline">
-          添加推广
+          添加分类
         </v-card-title>
         <v-card-text>
           <v-form ref="addFormRef" lazy-validation>
@@ -374,6 +374,7 @@ export default {
     async showEditDialog(data) {
       this.editForm = data;
       try {
+
         const result = await axios.get(this.editForm.cover, {timeout: 5000});
         this.editImageUrl = this.editForm.cover;
         this.editForm.cover = new File([result.data ? result.data: ''], this.editForm.cover.split("/").slice(-1));

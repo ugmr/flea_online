@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { getToken } from '../libs/utils/token.js';
 import store from '../store';
-import router from '../router';
+// import router from '../router';
 
 const adminURL = "http://localhost:3000/api/admin/v1";
 const commonURL = "http://localhost:3000/api/v1";
@@ -10,6 +10,7 @@ axios.defaults.timeout = 5000;
 
 // 请求头加上token
 const requestInterceptor = (config) => {
+  store.commit("overlay/SHOW_OVERLAY");
   if(store.state.log.isLogin) {
     const token = getToken();
     config.headers.Authorization = `Bearer ${token}`;
@@ -19,18 +20,20 @@ const requestInterceptor = (config) => {
 // 响应拦截
 const responseInterceptor = {
   OnFulfilled: (response) => {
+    store.commit("overlay/HIDE_OVERLAY");
     return response
   },
   onReject: (error) => {
+    store.commit("overlay/HIDE_OVERLAY");
     if(error.response) {
       switch (error.response.status) {
         // 返回401 清除Token并跳转到登陆页面
         case 401:
-          store.commit("LOGOUT");
-          router.replace({
-            name: 'Login',
-            query: { redirect: router.currentRoute.name }
-          });
+          // store.commit("LOGOUT");
+          // router.replace({
+          //   name: 'Login',
+          //   query: { redirect: router.currentRoute.name }
+          // });
           break;
       }
     }
@@ -49,10 +52,15 @@ const http = function (instance, method) {
   return function (url, params, config) {
     return new Promise((resolve, reject) => {
       instance[method](url, params, config).then((res) => {
-        if(res.data !== null && res.data.status === "fail") {
-          reject(res.data);
+        if(!res) reject();
+        if(method === "delete") {
+          console.log(res);
+          resolve();
+        } else {
+          if(typeof res.data === "undefined") reject();
+          else if(res.data.status === "fail") reject();
+          else resolve(res.data);
         }
-        resolve(res.data);
       }, (err) => {
         reject(err);
       });

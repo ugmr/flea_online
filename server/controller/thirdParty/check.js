@@ -12,10 +12,9 @@ const validate = async function (req, res) {
   // 校验验证码
   const result = await redisDb.get(redisDb.types.CAPTCHA, mobile);
   const valid = result == code;
-  console.log(result, code)
   if(valid) {
     // 验证用户是否存在
-    const exist = user.findOne({mobile: mobile});
+    const exist = await user.findOne({mobile: mobile});
     // 注册用户已存在
     if(type == 0 && exist) throw new CError(ERROR.USER_EXISTED, '用户已存在');
     // 重制/注销 用户已存在

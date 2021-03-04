@@ -38,14 +38,13 @@
     </v-card-actions>
     <!-- 页脚 版权信息 -->
     <div class="v-card-footer">
-      © 2015-2016 DeathGhost 版权所有
-      <br/>
-      陕B2-20080224-1
+      {{ copyright }}
     </div>
   </v-card>
 </template>
 
 <script>
+import {mapState} from "vuex";
 const mpattern = /^1(3[0-9]|4[5,7]|5[0,1,2,3,5,6,7,8,9]|6[2,5,6,7]|7[0,1,7,8]|8[0-9]|9[1,8,9])\d{8}$/;
 
 export default {
@@ -62,22 +61,25 @@ export default {
       (v) => (v.length >= 6 && v.length <= 20) || "密码不合法",
     ],
   }),
+  computed: {
+    ...mapState(["copyright"])
+  },
   methods: {
-    login() {
+    async login() {
       const valid = this.$refs.loginFormRef.validate();
       if(!valid) return;
-      this.overlay = true;
-      this.$store.dispatch('log/LOGIN', {
-        mobile: this.mobile,
-        password: this.password
-      }).then(() => {
+      try {
+        await this.$store.dispatch('log/LOGIN', {
+          mobile: this.mobile,
+          password: this.password
+        });
         this.$router.push({ path: "/dashboard" }, () => {})
         this.$toast("登陆成功");
-      }, () => {
+      } catch {
         this.$toast("用户名或密码错误");
-      });
+      }
     },
-  }
+  },
 }
 </script>
 

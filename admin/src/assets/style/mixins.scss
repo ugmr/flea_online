@@ -70,6 +70,9 @@
       margin: 0 15px;
       position: relative;
       top: -20px;
+      font-size: 16px;
+      font-weight: bold;
+
       &.card-header-danger {
         box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(244 67 54 / 40%);
         background: linear-gradient(60deg, #ef5350, #e53935);

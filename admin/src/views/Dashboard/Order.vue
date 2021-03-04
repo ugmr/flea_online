@@ -8,32 +8,33 @@
             <!-- 卡片头部 -->
             <div class="card-header card-header-primary card-header-info">
               <v-container>
-                <v-row justify="space-between">
+                <v-row>
+                  <!-- 搜索框 -->
+                  <v-col cols="4">
+                    <v-text-field
+                        v-model="search.title"
+                        label="标题"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="1">
+                    <v-btn fab small class="mt-3" @click="getList">
+                      <v-icon>mdi-magnify</v-icon>
+                    </v-btn>
+                  </v-col>
+                  <v-spacer></v-spacer>
+                  <!-- 添加按钮 -->
+                  <v-col cols="1" align-self="center">
+                    <v-btn @click="showAddDialog">添加</v-btn>
+                  </v-col>
                   <!-- 批量操作 -->
-                  <v-col v-if="!isSelect">
+                  <v-col cols="2" v-if="!isSelect" align-self="center">
                     <v-btn @click="isSelect = true">
                       批量操作
                     </v-btn>
                   </v-col>
-                  <v-col v-else>
+                  <v-col align-self="center" cols="2" v-else>
                     <v-btn class="mr-2" @click="isSelect = false">取消</v-btn>
                     <v-btn @click="deleteAll">删除</v-btn>
-                  </v-col>
-                  <v-row>
-                    <!-- 搜索框 -->
-                    <v-col cols="4">
-                      <v-text-field
-                          v-model="search.title"
-                          label="标题"
-                      ></v-text-field>
-                    </v-col>
-
-                    <v-btn fab small class="mt-6 ml-3" @click="getList">
-                      <v-icon>mdi-magnify</v-icon>
-                    </v-btn>
-                  </v-row>
-                  <v-col cols="1">
-                    <v-btn @click="showAddDialog">添加</v-btn>
                   </v-col>
                 </v-row>
               </v-container>
@@ -124,13 +125,13 @@
       >
         <v-card>
           <v-card-title class="headline">
-            编辑帖子
+            编辑公告
           </v-card-title>
           <v-card-text>
             <v-form ref="editFormRef" lazy-validation>
               <v-text-field
                   v-model="editForm.title"
-                  label="推广名称"
+                  label="公告标题"
                   type="text"
                   required
               ></v-text-field>
@@ -167,19 +168,13 @@
       >
         <v-card>
           <v-card-title class="headline">
-            发送通知
+            发布公告
           </v-card-title>
           <v-card-text>
             <v-form ref="addFormRef" lazy-validation>
               <v-text-field
                   v-model="addForm.title"
-                  label="推广名称"
-                  type="text"
-                  required
-              ></v-text-field>
-              <v-text-field
-                  v-model="addForm.userId"
-                  label="目标用户"
+                  label="公告标题"
                   type="text"
                   required
               ></v-text-field>
@@ -217,7 +212,7 @@
 import * as api from "@/api/api";
 
 export default {
-  name: "Report",
+  name: "Announcement",
   data: () => ({
     search: {
       title: "",
@@ -226,9 +221,8 @@ export default {
     selected: [],
     headers: [
       { text: "索引", value: "index", sortable: false },
-      { text: "名称", value: "title", sortable: false },
-      { text: "发布者", value: "userId", sortable: false},
-      { text: "所属话题", value: "content", sortable: false },
+      { text: "标题", value: "title", sortable: false },
+      { text: "内容", value: "content", sortable: false, width: "500"},
       { text: "时间", value: "createdAt", sortable: true },
       { text: "操作", value: "operation", sortable: false }
     ],
@@ -249,14 +243,19 @@ export default {
     editDialog: false,
     editForm: {}
   }),
+  computed: {
+  },
   methods: {
     async getList() {
       this.loading = true;
 
       const conditions = {};
       conditions.title = this.search.title;
+      if (this.search.status) {
+        conditions.status = this.search.status;
+      }
 
-      const result = await api.getPostList({
+      const result = await api.getAnnouncementList({
         conditions,
         options: {
           limit: this.itemsPerPage,
@@ -286,11 +285,11 @@ export default {
       if(!valid) return;
 
       try {
-        await api.addPost(this.addForm);
-        this.$toast("添加通知成功");
+        await api.addAnnouncement(this.addForm);
+        this.$toast("添加公告成功");
         await this.getList();
       } catch {
-        this.$toast("添加通知失败");
+        this.$toast("添加公告失败");
       }
 
       this.addForm = {};
@@ -307,16 +306,17 @@ export default {
     },
     async confirmDelete() {
       try {
-        await api.deletePost(this.deleteId);
-        this.$toast("删除帖子成功");
+        await api.deleteAnnouncement(this.deleteId);
+        this.$toast("删除订单成功");
         await this.getList();
       } catch {
-        this.$toast("删除通知失败");
+        this.$toast("删除订单失败");
       }
 
       this.deleteId = '';
       this.deleteDialog = false;
     },
+
     // 修改逻辑
     showEditDialog(item) {
       this.editForm = item;
@@ -327,12 +327,20 @@ export default {
       this.editDialog = false;
     },
     async confirmEdit() {
-      const valid = this.$refs.editFormRef.validate();
+      const valid = this.$refs.eidtFormRef.validate();
       if(!valid) return;
+
+      try {
+        await api.updateOrder(this.editForm._id, this.editForm);
+        this.$toast("修改订单信息成功");
+        await this.getList();
+      }catch {
+        this.$toast("修改订单信息失败");
+      }
     }
   },
   async mounted() {
-    this.$store.commit("CHANGE_TITLE", "帖子管理");
+    this.$store.commit("CHANGE_TITLE", "订单管理");
     await this.getList();
   },
 }

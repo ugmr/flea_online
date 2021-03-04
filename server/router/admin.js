@@ -15,7 +15,8 @@ const auth = require('../middleware/auth');
 // 登陆登出
 router.post('/login', require('../controller/log/login')(true));
 router.post('/logout', auth(true),require('../controller/log/logout')(true));
-
+router.post('/update_password', auth(true), require("../controller/user/updatePassword"));
+router.post('/update_profile', auth(true), require("../controller/user/updateProfile"));
 Object.keys(models).forEach(modelName => {
   if(['post', 'role', 'permission','blacklist', 'relation', 'collect', 'userTopic', 'postComment', 'goodsComment', 'evaluation', 'setting'].includes(modelName)) return;
   const model = models[modelName];

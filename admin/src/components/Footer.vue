@@ -4,13 +4,18 @@
         class="text-center"
         cols="12"
     >
-      {{ new Date().getFullYear() }} — <strong>Vuetify</strong>
+      {{copyright}}
     </v-col>
   </v-footer>
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
-  name: "Footer"
+  name: "Footer",
+  computed: {
+    ...mapState(["copyright"])
+  }
 }
 </script>

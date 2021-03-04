@@ -25,9 +25,8 @@
     </v-card-title>
     <v-card-text>
       <div class="step_items">
-        <transition name="slide-fade">
           <div class="step_content" v-show="step === 1">
-            <v-form lazy-validation>
+            <v-form ref="form1" lazy-validation>
               <v-container>
                 <v-row>
                   <v-text-field
@@ -40,7 +39,7 @@
                 </v-row>
                 <v-row>
                   <drag-verify
-                      width="358"
+                      :width="358"
                       ref="dragVerify"
                       :isPassing.sync="isPassing"
                       text="请按住滑块拖动"
@@ -61,9 +60,9 @@
                         required
                     ></v-text-field>
                   </v-col>
-                  <v-col>
-                    <v-btn block color="primary">
-                      获取验证码
+                  <v-col align-self="center">
+                    <v-btn block color="primary" class="mb-3" :disabled="disabled" @click="getCode">
+                      {{disabled ? `获取验证码 (${timer})`: "获取验证码"}}
                     </v-btn>
                   </v-col>
                 </v-row>
@@ -71,19 +70,18 @@
             </v-form>
           </div>
           <div class="step_content" v-show="step === 2">
-            <v-form  lazy-validation>
+            <v-form ref="form2" lazy-validation>
               <v-text-field
                   v-model="password"
                   :rules="passwordRules"
                   label="新密码"
-                  type="text"
+                  type="password"
                   required
               ></v-text-field>
               <v-text-field
                   v-model="repeat"
-                  :rules="passwordRules"
                   label="重复密码"
-                  type="text"
+                  type="password"
                   required
               ></v-text-field>
             </v-form>
@@ -92,7 +90,6 @@
             <img src="../../assets/imgs/complete.png" alt="complete" width="50" height="50">
             <p class="text-body-1 mt-4">修改密码成功！</p>
           </div>
-        </transition>
       </div>
 
     </v-card-text>
@@ -110,7 +107,7 @@
             block
             color="primary"
             v-show="step === 2"
-            @click="checkCode"
+            @click="modify"
         >
           下一步
         </v-btn>
@@ -126,14 +123,14 @@
     </v-card-actions>
     <!-- 页脚 版权信息 -->
     <div class="v-card-footer">
-     © 2015-2016 DeathGhost 版权所有
-     <br/>
-     陕B2-20080224-1
+      {{copyright}}
     </div>
   </v-card>
 </template>
-
+s
 <script>
+import * as api from "@/api/api";
+import { mapState } from "vuex";
 import dragVerify from "vue-drag-verify2";
 const mpattern = /^1(3[0-9]|4[5,7]|5[0,1,2,3,5,6,7,8,9]|6[2,5,6,7]|7[0,1,7,8]|8[0-9]|9[1,8,9])\d{8}$/;
 
@@ -145,6 +142,9 @@ export default {
   data: () => ({
     step: 1,
     forget: false,
+    disabled: false,
+    timer: 60,
+    interval: null,
     mobile: '',
     mobileRules: [
       (v) => !!v || "手机号码不能为空",
@@ -153,16 +153,66 @@ export default {
     code: '',
     codeRules: [
       (v) => !!v || "验证码不能为空",
-      (v) => (v.length === 6) || "密码不合法",
+      (v) => (v.length === 6) || "验证码不合法",
     ],
-    isPassing: false
+    password: "",
+    passwordRules: [
+      (v) => !!v || "密码不能为空",
+      (v) => (v.length >= 6 && v.length <= 20) || "密码不合法",
+    ],
+    repeat: "",
+    isPassing: false,
+
   }),
+  computed: {
+    ...mapState(["copyright"])
+  },
   methods: {
     getCode () {
+      // if(!this.mobile) {
+      //   this.
+      // }
+      if(!this.isPassing){
+        this.$toast("请先完成滑动验证");
+        return;
+      }
+      this.disabled = true;
+      this.interval = setInterval(() => {
+        this.timer --;
+      }, 1000);
+    },
+    async checkCode () {
+      // const valid = this.$refs.form1.validate();
+      // if(!valid) return;
+      try {
+        const result = await api.verify({
+          mobile: this.mobile,
+          code: this.code,
+          type: 1,
+        });
+        if(!result.data.valid) {
+          this.$toast("验证失败");
+          this.nextStep();
+        } else {
+          this.nextStep();
+        }
+      } catch {
+        this.$toast("验证失败");
+      }
 
     },
-    checkCode () {
-      this.nextStep()
+    async modify() {
+      const valid = this.$refs.form2.validate();
+      if(!valid) return;
+      try {
+        await api.reset({
+          mobile: this.mobile,
+          password: this.password
+        });
+        this.nextStep();
+      } catch {
+        this.$toast("密码修改失败");
+      }
     },
     nextStep () {
       this.step += 1;
@@ -174,6 +224,16 @@ export default {
       this.step -= 1;
       if  (this.step <= 0) {
         this.step = 1;
+      }
+    }
+  },
+  watch: {
+    timer: function (newVal) {
+      if(newVal === 0) {
+        this.disabled = false;
+        this.timer = 60;
+        this.interval && clearInterval(this.interval);
+        this.interval = null;
       }
     }
   }

@@ -1,7 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "./store";
-
 Vue.use(VueRouter);
 
 const router = new VueRouter({
@@ -172,6 +171,22 @@ const router = new VueRouter({
           name: "Category",
           path: "/category",
           component: () => import("./views/Dashboard/Category")
+        },
+        {
+          name: "Profile",
+          path: "/profile",
+          component: () => import("./views/Dashboard/Profile")
+        },
+
+        {
+          name: "Order",
+          path: "/order",
+          component: () => import("./views/Dashboard/Order")
+        },
+        {
+          name: "Password",
+          path: "/password",
+          component: () => import("./views/Dashboard/Password")
         }
       ]
     },
@@ -180,6 +195,7 @@ const router = new VueRouter({
 
 // 登陆拦截
 router.beforeEach((to, from, next) => {
+  store.commit("overlay/SHOW_OVERLAY");
   if (to.meta.requireAuth) {
     if (store.state.log.isLogin) {
       next();
@@ -192,6 +208,10 @@ router.beforeEach((to, from, next) => {
   } else {
     next();
   }
+});
+
+router.afterEach(() => {
+  store.commit("overlay/HIDE_OVERLAY");
 });
 
 export default router;

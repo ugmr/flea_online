@@ -1,7 +1,10 @@
 <template>
   <div id="app">
     <router-view></router-view>
-    <v-overlay :value="overlay">
+    <v-overlay
+      :value="overlay"
+      :z-index="1000"
+    >
       <v-progress-circular
           indeterminate
           size="64"
@@ -18,10 +21,13 @@ export default {
   data: () => ({
     //
   }),
-  methods: {
-  },
   computed: {
-    ...mapState("overlay", ["overlay"])
+    ...mapState("overlay", ["overlay"]),
+    ...mapState("theme", ["dark"])
+  },
+  mounted() {
+    this.$store.dispatch("GET_COPYRIGHT");
+    this.$vuetify.theme.dark = this.dark;
   }
 };
 </script>
@@ -33,5 +39,8 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: auto;
   font-size: 14px;
+}
+.v-overlay {
+  z-index: 1000
 }
 </style>

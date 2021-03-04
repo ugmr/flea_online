@@ -46,7 +46,7 @@
                       <v-icon>mdi-magnify</v-icon>
                     </v-btn>
                   </v-row>
-                  <v-space></v-space>
+                  <v-spacer></v-spacer>
                   <v-col cols="1">
                     <v-btn>添加</v-btn>
                   </v-col>

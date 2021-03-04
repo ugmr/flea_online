@@ -7,9 +7,7 @@ const get = async (req, res) => {
   res.status(200).json({
     status: "success",
     message: "获取设置成功",
-    data: {
-      setting: result
-    }
+    data: result
   });
 }
 

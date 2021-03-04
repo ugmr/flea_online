@@ -6,13 +6,11 @@
           <v-card class="card">
             <div class="card-header card-header-info card-header-primary">
               <v-container>
-                <v-row justify="space-between">
-                  <v-col>
-                    <v-tabs background-color="transparent">
-                      <v-tab>待审核</v-tab>
-                      <v-tab>已通过</v-tab>
-                    </v-tabs>
+                <v-row >
+                  <v-col align-self="center">
+                    待审核商品
                   </v-col>
+                  <v-spacer></v-spacer>
                   <v-col cols="2" align-self="center">
                     <v-btn text color="primary" to="/goods">
                       查看全部商品
@@ -24,7 +22,7 @@
             <div class="card-body">
               <v-data-table
                 :headers="headers"
-                :items="adverts"
+                :items="items"
                 item-key="name"
                 :page.sync="page"
                 :items-per-page="itemsPerPage"

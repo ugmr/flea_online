@@ -18,7 +18,8 @@
     "express-async-errors": "^3.1.1",
     "mongoose": "^5.11.11",
     "qiniu": "^7.3.2",
-    "redis": "^3.0.2"
+    "redis": "^3.0.2",
+    "vuelidate": "^0.7.6"
   },
   "devDependencies": {
     "@alicloud/pop-core": "^1.7.10",

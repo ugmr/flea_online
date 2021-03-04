@@ -341,7 +341,7 @@ export default {
     }
   },
   async mounted() {
-    this.$store.commit("CHANGE_TITLE", "公告管理");
+    this.$store.commit("CHANGE_TITLE", "商品管理");
     await this.getList();
   },
 }

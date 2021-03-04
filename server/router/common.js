@@ -9,11 +9,11 @@ const guest = [
   // 获取短信验证码
   {method: 'post', path: '/sms', handler: require('../controller/thirdParty/sms')},
   // 校验验证码
-  {method: 'post', path: '/checkSMS', handler: require('../controller/thirdParty/check')},
+  {method: 'post', path: '/check_sms', handler: require('../controller/thirdParty/check')},
   // 忘记密码
-  {method: 'post', path: '/forget', handler: require('../controller/user/forget')},
+  {method: 'post', path: '/reset', handler: require('../controller/user/forget')},
   // 检查用户名
-  {method: 'post', path: '/checkUserName', handler: require('../controller/user/checkUserName')}
+  {method: 'post', path: '/check_username', handler: require('../controller/user/checkUserName')}
 ];
 // 需要普通用户身份验证的接口
 const user = [

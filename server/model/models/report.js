@@ -6,6 +6,8 @@ const reportSchema = new Schema({
   userId: {type: Schema.Types.ObjectId, required: true},
   // 目标id
   targetId: {type: Schema.Types.ObjectId, required: true},
+  // 标题
+  name: {type: String, required: true},
   // 类型
   type: {type: String, required: true},
   // 举报信息

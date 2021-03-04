@@ -136,7 +136,7 @@ export default {
       gender: "",
     },
     genderItems: [
-      {text:  "男", value: "male"},
+      {text: "男", value: "male"},
       {text: "女", value: "female"}
     ],
     isSelect: false

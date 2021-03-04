@@ -69,8 +69,8 @@
                   {{ (pageCount - 1) * itemsPerPage + index + 1 }}
                 </template>
                 <template v-slot:item.status="{ value }">
-                  <v-chip v-if="value" color="success">已读</v-chip>
-                  <v-chip v-else color="red">未读</v-chip>
+                  <v-chip v-if="value" outlined color="success">已读</v-chip>
+                  <v-chip v-else outlined color="red">未读</v-chip>
                 </template>
                 <template v-slot:item.createdAt="{ value }">
                   {{value.slice(0, 10)}}
@@ -137,7 +137,7 @@
       >
         <v-card>
           <v-card-title class="headline">
-            编辑推广
+            编辑通知
           </v-card-title>
           <v-card-text>
             <v-form ref="editFormRef" lazy-validation>
